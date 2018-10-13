@@ -23,6 +23,9 @@ public:
 	T& GetLast(); // получение последнего элемента списка: O(N)
 	T& Get(int index); // получение элемента по индексу: O(N)
 
+	T GetMin() const; // получение минимума
+	T GetMax() const; // получение максимума
+
 	void AddFront(const T& value); // добавление в начало списка: O(1)
 	void AddBack(const T& value); // добавление в конец списка: O(N)
 	void InsertAt(int index, const T& value); // добавление в произвольное место списка: O(N)
@@ -35,6 +38,8 @@ public:
 	void BubleSort(); // сортировка пузырьком
 	void SelectionSort(); // сортировка выбором (минимума)
 	void MergeSort(); // сортировка слияниями
+
+	void Reverse(); // перестановка списка в обратном порядке
 
 	void Print() const; // печать списка
 
@@ -133,6 +138,44 @@ T& LinkedList<T>::Get(int index) {
 	}
 
 	return node->value; // возвращаем его значение
+}
+
+template <typename T>
+T LinkedList<T>::GetMin() const {
+	if (IsEmpty())
+		throw "LinkedList::GetMin(): list is empty";
+
+	T min = head->value;
+
+	Node *node = head->next;
+
+	while (node) {
+		if (node->value < min)
+			min = node->value;
+
+		node = node->next;
+	}
+
+	return min;
+}
+
+template <typename T>
+T LinkedList<T>::GetMax() const {
+	if (IsEmpty())
+		throw "LinkedList::GetMax(): list is empty";
+
+	T max = head->value;
+
+	Node *node = head->next;
+
+	while (node) {
+		if (node->value > max)
+			max = node->value;
+
+		node = node->next;
+	}
+
+	return max;
 }
 
 template <typename T>
@@ -457,6 +500,21 @@ void LinkedList<T>::MergeSort() {
 		right.RemoveFront();
 
 		tmp = tmp->next;
+	}
+}
+
+template <typename T>
+void LinkedList<T>::Reverse() {
+	if (IsEmpty())
+		return;
+
+	Node *node = head;
+
+	while (node->next) {
+		Node *tmp = node->next;
+		node->next = tmp->next;
+		tmp->next = head;
+		head = tmp;
 	}
 }
 

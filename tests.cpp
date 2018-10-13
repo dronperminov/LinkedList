@@ -453,6 +453,60 @@ void MergeSortTests() {
 	cout << "OK" << endl;
 }
 
+
+void FunctionsTests() {
+	cout << "FunctionsTests:" << endl;
+
+	LinkedList<int> list;
+
+	list.AddBack(1);
+
+	assert(list.GetMin() == 1);
+	assert(list.GetMax() == 1);
+
+	list.AddBack(2);
+
+	assert(list.GetMin() == 1);
+	assert(list.GetMax() == 2);
+
+	list.AddBack(0);
+
+	assert(list.GetMin() == 0);
+	assert(list.GetMax() == 2);
+
+	list = GetList(1, 1);
+	
+	assert(list.Get(0) == 1);
+	list.Reverse();
+	assert(list.Get(0) == 1);
+
+	list = GetList(5, 1);
+
+	assert(list.Get(0) == 5);
+	assert(list.Get(1) == 4);
+	assert(list.Get(2) == 3);
+	assert(list.Get(3) == 2);
+	assert(list.Get(4) == 1);
+
+	list.Reverse();
+
+	assert(list.Get(0) == 1);
+	assert(list.Get(1) == 2);
+	assert(list.Get(2) == 3);
+	assert(list.Get(3) == 4);
+	assert(list.Get(4) == 5);
+
+	list.Reverse();
+
+	assert(list.Get(0) == 5);
+	assert(list.Get(1) == 4);
+	assert(list.Get(2) == 3);
+	assert(list.Get(3) == 2);
+	assert(list.Get(4) == 1);
+
+	cout << "OK" << endl;
+}
+
 int main() {
 	AddFrontTests();
 	AddBackTests();
@@ -467,4 +521,6 @@ int main() {
 	BubleSortTests();
 	SelectionSortTests();
 	MergeSortTests();
+
+	FunctionsTests();
 }

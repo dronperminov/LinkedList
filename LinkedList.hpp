@@ -17,6 +17,7 @@ public:
 
 	int Length() const; // получение длины списка
 	bool IsEmpty() const; // проверка списка на пустоту
+	bool IsSorted() const; // проверка на упорядоченность (по неубыванию)
 
 	T& GetFirst(); // получение первого элемента списка: O(1)
 	T& GetLast(); // получение последнего элемента списка: O(N)
@@ -30,6 +31,10 @@ public:
 	void RemoveBack(); // удаление с конца списка: O(N)
 	void RemoveAt(int index); // удаление по индексу: O(N)
 	void Remove(const T& value); // удаление элементов равных value: O(N)
+
+	void BubleSort(); // сортировка пузырьком
+	void SelectionSort(); // сортировка выбором (минимума)
+	void MergeSort(); // сортировка слияниями
 
 	void Print() const; // печать списка
 
@@ -74,6 +79,19 @@ int LinkedList<T>::Length() const {
 template <typename T>
 bool LinkedList<T>::IsEmpty() const {
 	return length == 0;
+}
+
+template <typename T>
+bool LinkedList<T>::IsSorted() const {
+	if (IsEmpty())
+		return false; // пустой список не является упорядоченным
+
+	Node *node = head;
+
+	while (node->next && node->value <= node->next->value)
+		node = node->next;
+
+	return node->next == nullptr;
 }
 
 template <typename T>
@@ -277,6 +295,168 @@ void LinkedList<T>::Remove(const T& value) {
 
 		prev = node;
 		node = node->next; // переходим к следующему элементу
+	}
+}
+
+template <typename T>
+void LinkedList<T>::BubleSort() {
+	if (length < 2)
+		return;
+
+	bool isSorted = false;
+
+	while (!isSorted) {
+		isSorted = true;
+
+		Node *prev = nullptr;
+		Node *node = head;
+
+		while (node->next) {
+			if (node->value > node->next->value) {
+				Node *next = node->next;
+				node->next = next->next;
+				next->next = node;
+
+				if (node == head) {
+					head = next;
+				}
+				else {
+					prev->next = next;
+					node = next;
+				}
+
+				isSorted = false;
+			}
+
+			prev = node;
+			node = node->next;
+		}
+	}
+}
+
+template <typename T>
+void LinkedList<T>::SelectionSort() {
+	if (length < 2)
+		return;
+
+	Node *prev = nullptr;
+	Node *node = head;
+
+	while (node) {
+		Node *minPrev = prev;
+		Node *min = node;
+
+		Node *tmpPrev = node;
+		Node *tmp = node->next;
+
+		while (tmp) {
+			if (tmp->value < min->value) {
+				minPrev = tmpPrev;
+				min = tmp;
+			}
+
+			tmpPrev = tmp;
+			tmp = tmp->next;
+		}
+
+		if (node == min) {
+			prev = node;
+			node = node->next;
+		}
+		else {
+			if (prev != nullptr) {
+				prev->next = min;
+			}
+			else {
+				head = min;
+			}
+
+			if (node->next == min) {
+				node->next = min->next;
+				min->next = node;
+
+				prev = min;
+			}
+			else {
+				Node *next2 = min->next;
+
+				min->next = node->next;
+				node->next = next2;
+
+				minPrev->next = node;
+
+				prev = min;
+				node = min->next;
+			}
+		}
+	}
+}
+
+template <typename T>
+void LinkedList<T>::MergeSort() {
+	if (length < 2)
+		return; // если список пуст или из 1 элемента, то выходим
+
+	// списки для левой и правой половины
+	LinkedList<T> left;
+	LinkedList<T> right;
+
+	int index = 0;
+	Node *tmp = head;
+
+	// записываем левую половину списка в левый список
+	while (index < length / 2) {
+		left.AddBack(tmp->value);
+
+		index++;
+		tmp = tmp->next;
+	}
+
+	// записываем правую половину списка в правый список
+	while (index < length) {
+		right.AddBack(tmp->value);
+
+		index++;
+		tmp = tmp->next;
+	}
+
+	// рекурсивно выполняем сортировку подсписков
+	left.MergeSort();
+	right.MergeSort();
+
+	tmp = head;
+
+	// выполняем слияние подсписков в список
+	while (!left.IsEmpty() && !right.IsEmpty()) {
+		T value1 = left.GetFirst();
+		T value2 = right.GetFirst();
+
+		if (value1 < value2) {
+			tmp->value = value1;
+			left.RemoveFront();
+		}
+		else {
+			tmp->value = value2;
+			right.RemoveFront();
+		}
+
+		tmp = tmp->next;
+	}
+
+	// дозаписываем из левого подсписка
+	while (!left.IsEmpty()) {
+		tmp->value = left.GetFirst();
+		left.RemoveFront();
+
+		tmp = tmp->next;
+	}
+
+	// дозаписываем из правого подсписка
+	while (!right.IsEmpty()) {
+		tmp->value = right.GetFirst();
+		right.RemoveFront();
+
+		tmp = tmp->next;
 	}
 }
 

@@ -489,6 +489,41 @@ void MergeSortTests() {
 	cout << "OK" << endl;
 }
 
+void QuickSortTests() {
+	cout << "QuickSortTests:" << endl;
+
+	LinkedList<int> list1 = GetList(5, 0);
+	LinkedList<int> list2 = GetList(5, 1);
+	LinkedList<int> list3 = GetList(1000, 2);
+
+	assert(list1.IsSorted());
+	assert(!list2.IsSorted());
+
+	list1.QuickSort();
+	assert(list1.IsSorted());
+	assert(list1.GetFirst() == 1);
+	assert(list1.GetLast() == 5);
+	assert(list1.Get(0) == 1);
+	assert(list1.Get(1) == 2);
+	assert(list1.Get(2) == 3);
+	assert(list1.Get(3) == 4);
+	assert(list1.Get(4) == 5);
+
+	list2.QuickSort();
+	assert(list2.IsSorted());
+	assert(list2.GetFirst() == 1);
+	assert(list2.GetLast() == 5);
+	assert(list2.Get(0) == 1);
+	assert(list2.Get(1) == 2);
+	assert(list2.Get(2) == 3);
+	assert(list2.Get(3) == 4);
+	assert(list2.Get(4) == 5);
+
+	list3.QuickSort();
+	assert(list3.IsSorted());
+
+	cout << "OK" << endl;
+}
 
 void FunctionsTests() {
 	cout << "FunctionsTests:" << endl;
@@ -558,6 +593,7 @@ int main() {
 	SelectionSortTests();
 	InsertionSortTests();
 	MergeSortTests();
+	QuickSortTests();
 
 	FunctionsTests();
 }

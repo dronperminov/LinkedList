@@ -23,6 +23,7 @@ Operations for work with templated linked list
 * SelectionSort (**O(n<sup>2</sup>)**)
 * InsertionSort (**O(n<sup>2</sup>)**)
 * MergeSort (**O(n log n)**)
+* QuickSort (**O(n log n)**)
 
 ### Other:
 * GetMin (**O(n)**)

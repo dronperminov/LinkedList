@@ -11,6 +11,11 @@ class LinkedList {
 	Node *head; // начало списка
 	int length; // количество элементов списка
 
+	Node* GetTail(Node *node) const; // получение последнего элемента списка
+	Node* Partition(Node *head, Node *tail, Node* &newHead, Node* &newTail);
+
+	Node* QuickSort(Node *head, Node *end); // рекурсивный метод быстрой сортировкм
+
 public:
 	LinkedList(); // конструктор по умолчанию
 	LinkedList(const LinkedList &list); // конструктор копирования
@@ -39,6 +44,7 @@ public:
 	void SelectionSort(); // сортировка выбором (минимума)
 	void InsertionSort(); // сортировка вставками
 	void MergeSort(); // сортировка слияниями
+	void QuickSort(); // быстрая сортировка
 
 	void Reverse(); // перестановка списка в обратном порядке
 
@@ -46,6 +52,80 @@ public:
 
 	~LinkedList();
 };
+
+// получение последнего элемента списка
+template <typename T>
+typename LinkedList<T>::Node* LinkedList<T>::GetTail(Node *node) const {
+	while (node && node->next)
+		node = node->next;
+
+	return node;
+}
+
+template <typename T>
+typename LinkedList<T>::Node* LinkedList<T>::Partition(Node *head, Node *end, Node* &newHead, Node* &newEnd) {
+	Node *pivot = end;
+	Node *prev = nullptr;
+	Node *cur = head;
+	Node *tail = pivot;
+
+	while (cur != pivot) {
+		if (cur->value < pivot->value) {
+			if (newHead == nullptr)
+				newHead = cur;
+
+			prev = cur;
+			cur = cur->next;
+		}
+		else {
+			if (prev)
+				prev->next = cur->next;
+
+			Node *tmp = cur->next;
+			cur->next = nullptr;
+			tail->next = cur;
+			tail = cur;
+			cur = tmp;
+		}
+	}
+
+	if (newHead == nullptr)
+		newHead = pivot;
+
+	newEnd = tail;
+
+	return pivot;
+}
+
+// екурсивный метод быстрой сортировки
+template <typename T>
+typename LinkedList<T>::Node* LinkedList<T>::QuickSort(Node *head, Node *end) {
+	if (head == nullptr || head == end)
+		return head;
+
+	Node *newHead = nullptr;
+	Node *newEnd = nullptr;
+
+	Node *pivot = Partition(head, end, newHead, newEnd);
+
+	if (newHead != pivot) {
+		Node *tmp = newHead;
+
+		while (tmp->next != pivot)
+			tmp = tmp->next;
+
+		tmp->next = nullptr;
+
+		newHead = QuickSort(newHead, tmp);
+
+		tmp = GetTail(newHead);
+		tmp->next =  pivot;
+	}
+
+	pivot->next = QuickSort(pivot->next, newEnd);
+
+	return newHead;
+}
 
 template <typename T>
 LinkedList<T>::LinkedList() {
@@ -530,6 +610,13 @@ void LinkedList<T>::MergeSort() {
 
 		tmp = tmp->next;
 	}
+}
+
+template <typename T>
+void LinkedList<T>::QuickSort() {
+	Node *tail = GetTail(head); // получаем конец списка
+
+	head = QuickSort(head, tail); // вызываем рекурсивный алгоритм
 }
 
 template <typename T>

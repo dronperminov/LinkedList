@@ -21,6 +21,7 @@ Operations for work with templated linked list
 ### Sorting:
 * BubleSort (**O(n<sup>2</sup>)**)
 * SelectionSort (**O(n<sup>2</sup>)**)
+* InsertionSort (**O(n<sup>2</sup>)**)
 * MergeSort (**O(n log n)**)
 
 ### Other:

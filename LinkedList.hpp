@@ -37,6 +37,7 @@ public:
 
 	void BubleSort(); // сортировка пузырьком
 	void SelectionSort(); // сортировка выбором (минимума)
+	void InsertionSort(); // сортировка вставками
 	void MergeSort(); // сортировка слияниями
 
 	void Reverse(); // перестановка списка в обратном порядке
@@ -433,6 +434,34 @@ void LinkedList<T>::SelectionSort() {
 			}
 		}
 	}
+}
+
+template <typename T>
+void LinkedList<T>::InsertionSort() {
+	Node *sorted = nullptr;
+	Node *current = head;
+
+	while (current) {
+		Node *next = current->next;
+
+		if (sorted == nullptr || sorted->value >= current->value) {
+			current->next = sorted;
+			sorted = current;
+		}
+		else {
+			Node *node = sorted;
+
+			while (node->next && node->next->value < current->value)
+				node = node->next;
+
+			current->next = node->next;
+			node->next = current;
+		}
+
+		current = next;
+	}
+
+	head = sorted; // обновляем указатель на начало списка
 }
 
 template <typename T>
